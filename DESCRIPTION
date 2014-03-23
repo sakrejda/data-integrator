@@ -1,0 +1,10 @@
+Package: kmsql
+Type: Package
+Title: Convenience functions for SQL interfaces.
+Version: 0.1
+Date: 2012-05-29
+Author: Krzysztof Sakrejda
+Maintainer: Krzysztof Sakrejda <krzysztof.sakrejda@gmail.com>
+Depends: RMySQL, DBI
+Description: Provides a function to reuse connections through the same "conn" object, and a function to write large tables over a poor internet connection.
+License: GPL
