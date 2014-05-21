@@ -1,14 +1,10 @@
-# Functions to map names and types to standard names and R-appropriate types.
-export(toPOSIX, mapNames, mapTypes, mapCodes, fixNA)
-
-# Functions for dealing with cranky RMySQL corner cases (bad connections, and
-# avoiding accumulating a gazillion lost connections.
-export(dbRobustWriteTable,dbReconnect)
-
 
 # #############################################################################
 # S4 classes and methods:
 # #############################################################################
-importFrom(RMySQL, MySQL)
-importFrom(DBI, dbConnect, dbGetQuery, dbSendQuery, dbDisconnect)
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
+#importFrom(RMySQL, MySQL)
+importFrom(DBI, dbDriver, dbConnect, dbGetQuery, dbSendQuery, dbDisconnect)
+
 
