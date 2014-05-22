@@ -1,5 +1,5 @@
 exportClasses("db_connector")
-exportPattern("^[[:alpha:]]+")
+exportPattern("^[[:alpha:]_]+")
 exportPattern("^[^\\.]")
 importFrom(DBI, dbDriver, dbConnect, dbGetQuery, dbSendQuery, dbDisconnect)
 import(RPostgreSQL)
