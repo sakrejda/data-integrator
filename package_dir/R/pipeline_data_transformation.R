@@ -6,8 +6,6 @@ pipeline_data_transformation <- function(
 ) {
 	if(is.null(data)) stop("Data is required for a transformation.")
 	if(is.null(pipeline)) return(data)
-	pipeline_args <- lapply(X=pipeline, FUN=formalArgs)
-	source_names <- sapply(pipeline_args, `[[`, 1)
 	target_names <- names(pipeline)
 	if(is.null(final_names)) final_names <- target_names
 	if(length(final_names) == 1 && final_names == 'all')
@@ -15,24 +13,44 @@ pipeline_data_transformation <- function(
 	else 
 		keep_all_names <- FALSE
 	
-
 	source_env <- new.env(parent=envir)
 	for (nom in names(data)) {
 		assign(x=nom, value=data[[nom]], envir=source_env)
 	}
 
+	source_names <- vector(mode='character', length=0)
 	for ( i in seq_along(pipeline) ) {
-		f <- pipeline[[ i	]]
+		o_name <- target_names[i] 
+		if (is.function(pipeline[[i]])) {
+			f <- pipeline[[ i	]]
+			f_args <- formalArgs(f)
+			i_name <- f_args[1]
+		} else {
+			for ( j in seq_along(pipeline[[i]])) {
+				f <- pipeline[[i]][[j]]
+				f_args <- formalArgs(f)
+				i_name <- f_args[1]
+				if (exists(x=i_name, where=source_env)) break
+			}
+		}
+		if (multipath && !exists(x=i_name, where=source_env)) next	
+
+		if (!multipath && !exists(x=i_name, where=source_env)) {
+			msg <- paste0("Name '", i_name, "' is not a column in data.\n")
+			stop(msg)
+		}
+		if (!is.function(f)) stop("'f' is not a functio.\n")
+		if (is.null(formalArgs(f))) {
+			msg <- paste0("'f' must have at least one formal argument.\n")
+			stop(msg)
+		}
+
+		source_names <- c(source_names,i_name)
+
 		args <- list()
-		for (arg in pipeline_args[[i]]) {
-			if (multipath && (arg == source_names[i]) && !exists(x=arg, envir=source_env))
-				next;
-#			assign(x='arg', value=arg, envir=source_env)
-#			args[[arg]] <- with(data=source_env, expr=get(x=arg))
+		for (arg in f_args) {
 			args[[arg]] <- get(x=arg, envir=source_env, inherits=TRUE)
 		}
-		if (multipath && !(source_names[i] %in% names(args)) ) 
-			next;
 		assign(x=target_names[i], value=do.call(what=f, args=args), envir=source_env)
 	}
 
