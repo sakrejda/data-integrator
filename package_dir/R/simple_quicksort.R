@@ -143,7 +143,7 @@ dependency_resolver <- function(f_list) {
 #	h = function() { 10 }
 #)
 #
-#sorted_test_list <- function_list_dependency(test_list)
+#sorted_test_list <- dependency_resolver(test_list)
 
 
 
