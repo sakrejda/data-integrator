@@ -4,6 +4,12 @@ eval_pipe <- function(
 ) {
 	if(is.null(data)) stop("Data is required for a transformation.")
 	if(is.environment(data)) data <- list(environment)
+	if(is.list(data)) {
+		for ( i in seq_along(data)) {
+			if (!is.environment(data[[i]])) 
+				data[[i]] <- as.environment(data[[i]])
+		}
+	}
 	if(is.null(pipeline)) return(data)
 
 	n_expr <- length(pipeline)-1
@@ -25,7 +31,15 @@ eval_pipe <- function(
 	}
 
 	for ( i in seq_along(pipeline)) {
-		eval(expr=pipeline[[i]], envir=data[[n_data+i]],enclos=data[[length(data)]])
+		tryCatch(
+			expr=eval(expr=pipeline[[i]], envir=data[[n_data+i]],enclos=data[[length(data)]]),
+			error=function(e) {
+				for (i in 1:n_data) {
+					parent.env(data[[i]]) <- store_parents[[i]]
+				} 
+				stop(e)
+			}
+		)
 	}
 
 	## Restore original parents...
