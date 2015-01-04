@@ -33,7 +33,14 @@ pipeline_data_transformation <- function(
 				if (exists(x=i_name, where=source_env)) break
 			}
 		}
-		if (multipath && !exists(x=i_name, where=source_env)) next	
+		if (multipath) { ## Skip if any arguments are not find-able.
+			skip <- FALSE
+			for (arg in f_args) {
+				skip <- !exists(x=arg, where=source_env, inherits=TRUE) 
+				if (skip) break
+			}
+			if (skip) next
+		}
 
 		if (!multipath && !exists(x=i_name, where=source_env)) {
 			msg <- paste0("Name '", i_name, "' is not a column in data.\n")
