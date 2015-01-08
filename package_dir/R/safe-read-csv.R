@@ -1,3 +1,13 @@
+#' @title Read a .csv file with minimal modifications as allowed by R,
+#' then modify according to locally sourced files.
+#' @param file A .csv type file.
+#' @param instructions A .R file (source-able) which defines column name
+#' mapping ("column_map"), NA mapping ("unknowns"), as well as value
+#' mapping ("value_map", with "input", and "output" vectors.
+#' @param drop_uppercase Turns column names to all lower-case.  
+#' @return A data.frame with the .csv file loaded and modified as
+#' specified.
+
 safe_read_csv <- function( file, instructions=NULL, drop_uppercase=FALSE) {
 	e <- new.env()
 	if (!is.null(instructions)) {

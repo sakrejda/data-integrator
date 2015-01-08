@@ -1,11 +1,25 @@
-## Naive, after reading a few web pages about how to do it... 
-## I just need to sort a short list with a given comparator...
-## Based on: 
-##
-##http://algs4.cs.princeton.edu/23quicksort/
-##http://en.wikipedia.org/wiki/Quicksort
-##http://rosettacode.org/wiki/Sorting_algorithms/Quicksort
-## Thanks internet, that Pascal intro course was a long time ago...
+
+
+#' @title Sorting with an arbitrarily defined comparator ('<=' by
+#' default).
+#' @description A quicksort implementation.  It's generic so with the
+#'              right comparator it will do dependency sorting on
+#'              function lists...
+#' @param x The thing to be sorted.
+#' @param cmp The comparator, '<=' or similar.
+#' @return x, but sorted according to cmp.
+#' @details
+#'    Naive, after reading a few web pages about how to do it... 
+#'    I just need to sort a short list with a given comparator...
+#'    Based on: 
+#'   
+#'   http://algs4.cs.princeton.edu/23quicksort/
+#'   http://en.wikipedia.org/wiki/Quicksort
+#'   http://rosettacode.org/wiki/Sorting_algorithms/Quicksort
+#'    Thanks internet, that Pascal intro course was a long time ago...
+#' @examples
+#' o <- quicksort(rbinom(n=30, size=15, prob=0.8))
+#' @aliases quicksort.list
 
 quicksort <- function(x, cmp=`<=`) {
 	A <- new.env()
@@ -52,7 +66,27 @@ quicksort <- function(x, cmp=`<=`) {
 	return(A$x)
 }
 
-#o <- quicksort(rbinom(n=30, size=15, prob=0.8))
+
+#' @title Sorting with an arbitrarily defined comparator ('<=' by
+#' default).
+#' @description A quicksort implementation.  It's generic so with the
+#'              right comparator it will do dependency sorting on
+#'              function lists...
+#' @param x The thing to be sorted.
+#' @param cmp The comparator, '<=' or similar.
+#' @return x, but sorted according to cmp.
+#' @details
+#'    Naive, after reading a few web pages about how to do it... 
+#'    I just need to sort a short list with a given comparator...
+#'    Based on: 
+#'   
+#'   http://algs4.cs.princeton.edu/23quicksort/
+#'   http://en.wikipedia.org/wiki/Quicksort
+#'   http://rosettacode.org/wiki/Sorting_algorithms/Quicksort
+#'    Thanks internet, that Pascal intro course was a long time ago...
+#' @examples
+#' o <- quicksort.list(as.list(rbinom(n=30, size=15, prob=0.8)))
+#' @aliases quicksort
 
 quicksort.list <- function(x, cmp=`<=`) {
 	A <- new.env()
@@ -110,7 +144,11 @@ quicksort.list <- function(x, cmp=`<=`) {
 	return(A$x)
 }
 
-#o <- quicksort.list(as.list(rbinom(n=30, size=15, prob=0.8)))
+#' @title A comparator ('<=' equivalent) for quicksort. 
+#' @description Compares functions based on dependencies!
+#' @param f A function.
+#' @param g Another function.
+#' @return Returns TRUE if g does not depend on f.
 
 cmp_function_dependence <- function(f, g) {
 	nom_f <- attr(f,'name')
@@ -132,18 +170,24 @@ cmp_function_dependence <- function(f, g) {
 	stop("BAD THINGS.")
 }
 
+#' @title Dependency resolver for function lists.
+#' @description Returns the function with independent functions coming
+#' first.
+#' @param f_list A list of functions to be sorted.
+#' @examples
+#' test_list <- list(
+#' 	g = function(f, q) { f+q },
+#' 	f = function(x) { x^2 },
+#' 	h = function() { 10 }
+#' )
+#' 
+#' sorted_test_list <- dependency_resolver(test_list)
+#' @seealso cmp_function_dependence, quicksort.list
 dependency_resolver <- function(f_list) {
 	f_list <- quicksort.list(f_list, cmp=cmp_function_dependence)
 	return(f_list)
 }
 
-#test_list <- list(
-#	g = function(f, q) { f+q },
-#	f = function(x) { x^2 },
-#	h = function() { 10 }
-#)
-#
-#sorted_test_list <- dependency_resolver(test_list)
 
 
 
