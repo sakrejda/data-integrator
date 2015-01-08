@@ -5,11 +5,9 @@ Version: 0.1
 Date: 2012-05-29
 Author: Krzysztof Sakrejda
 Maintainer: Krzysztof Sakrejda <krzysztof.sakrejda@gmail.com>
-Imports:
-    DBI
-Depends:
-    RPostgreSQL,
-    methods
+Imports: DBI
+Depends: RPostgreSQL, methods
 Description: Readable scripts for importing data depend on defining clear
     tasks.  This package provides functions for common clear tasks.
 License: GPL
+Built: R 3.1.2; ; 2015-01-08 05:09:06 UTC; unix

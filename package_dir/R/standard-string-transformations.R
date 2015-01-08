@@ -1,4 +1,5 @@
 
+#' Standard strings transformations.
 standard_string_transformations <- list(
 	to_lower_case = tolower,
 	drop_leading_whitespace = function(x) gsub(x=x, pattern='\\A[ ]*', replacement='', perl=TRUE),

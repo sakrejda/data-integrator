@@ -99,26 +99,3 @@ db_connector <- setRefClass(Class="db_connector",
 	)
 )
 		
-
-dbRobustWriteTable <- function(credentials) {
-    numFullChunks <- nrow(value)%/%100
-    lengthLastChunk <- nrow(value)%%100
-		cnct <- db_connector(credentials)
-    if (numFullChunks >= 1) {
-        writeSeqFullChunks <- data.frame(Start = seq(0,numFullChunks-1,1)*100+1, Stop = seq(1,numFullChunks,1)*100)
-    }
-    writeSeqLastChunk <- data.frame(Start = numFullChunks*100+1, Stop = numFullChunks*100+lengthLastChunk)
-    if (numFullChunks >= 1) {
-        writeSeqAllChunks <- rbind(writeSeqFullChunks,writeSeqLastChunk)
-    } else { writeSeqAllChunks <- writeSeqLastChunk }
-
-    for(i in 1:nrow(writeSeqAllChunks)) {
-            try <- 0
-            rowSeq <- seq(writeSeqAllChunks$Start[i],writeSeqAllChunks$Stop[i],1)
-            while (!dbWriteTable(conn = cnct$conn, name = name, value = value[rowSeq,], overwrite = FALSE, append = TRUE) & try < tries) {
-                try <- try + 1
-                if (try == tries) { stop("EPIC FAIL") }
-                print(paste("Fail number",try,"epical fail at",tries,"tries.",sep = " "))
-            }
-    }
-}
