@@ -46,15 +46,7 @@ eval_pipe <- function(
 	}
 
 	for ( i in seq_along(pipeline)) {
-		tryCatch(
-			expr=eval(expr=pipeline[[i]], envir=data[[n_data+i]]),
-			error=function(e) {
-				for (i in 1:n_data) {
-					parent.env(data[[i]]) <- store_parents[[i]]
-				} 
-				stop(e)
-			}
-		)
+		try(eval(expr=pipeline[[i]], envir=data[[n_data+i]]))
 	}
 
 	## Restore original parents...
