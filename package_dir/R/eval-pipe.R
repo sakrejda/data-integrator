@@ -16,7 +16,8 @@
 eval_pipe <- function(
 	data = NULL, # List of environments, or an environment (which gets immediately promoted.
 	pipeline = list(),
-  debug=FALSE
+  debug=FALSE,
+  simplify=TRUE
 ) {
 	if(is.null(data)) stop("Data is required for a transformation.")
 	if(is.environment(data)) data <- list(environment)
@@ -48,17 +49,9 @@ eval_pipe <- function(
 
 	for ( i in seq_along(pipeline)) {
     if (!debug) {
-  		tryCatch(
-	  		expr=eval(expr=pipeline[[i]], envir=data[[n_data+i]]),
-		  	error=function(e) {
-			  	for (i in 1:n_data) {
-				  	parent.env(data[[i]]) <- store_parents[[i]]
-  				} 
-	  			stop(e)
-		  	}
-  		)
+		  try(eval(expr=pipeline[[i]], envir=data[[n_data+i]]))
     } else {
-	  		eval(expr=pipeline[[i]], envir=data[[n_data+i]])
+	    eval(expr=pipeline[[i]], envir=data[[n_data+i]])
     } 
 	}
 
@@ -69,7 +62,11 @@ eval_pipe <- function(
 	for ( i in (n_data+1):(n_data+n_expr) ) {
 		parent.env(data[[i]]) <- parent.frame()
 	}
-	return(lapply(output,as.list))
+  if (simplify) {
+  	return(lapply(output,as.list))
+  } else {
+    return(data)
+  }
 }
 
 
