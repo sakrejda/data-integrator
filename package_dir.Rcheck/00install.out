@@ -1,8 +1,7 @@
 * installing *source* package ‘integrator’ ...
 ** R
 ** preparing package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** testing if installed package can be loaded
-* DONE (integrator)
+Error in makeUsageCollector(fun, ...) : only works for closures
+Error : unable to load R code in package ‘integrator’
+ERROR: lazy loading failed for package ‘integrator’
+* removing ‘/home/krzysiek/packages/data-integrator/package_dir.Rcheck/integrator’

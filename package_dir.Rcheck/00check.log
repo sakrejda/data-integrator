@@ -13,60 +13,6 @@
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
 * checking for sufficient/correct file permissions ... OK
-* checking whether package ‘integrator’ can be installed ... OK
-* checking installed package size ... OK
-* checking package directory ... OK
-* checking DESCRIPTION meta-information ... OK
-* checking top-level files ... OK
-* checking for left-over files ... OK
-* checking index information ... OK
-* checking package subdirectories ... OK
-* checking R files for non-ASCII characters ... OK
-* checking R files for syntax errors ... OK
-* checking whether the package can be loaded ... OK
-* checking whether the package can be loaded with stated dependencies ... OK
-* checking whether the package can be unloaded cleanly ... OK
-* checking whether the namespace can be loaded with stated dependencies ... OK
-* checking whether the namespace can be unloaded cleanly ... OK
-* checking loading without being on the library search path ... OK
-* checking dependencies in R code ... NOTE
-Package in Depends field not imported from: ‘methods’
-  These packages need to be imported from (in the NAMESPACE file)
-  for when this namespace is loaded but not attached.
-See the information on DESCRIPTION files in the chapter ‘Creating R
-packages’ of the ‘Writing R Extensions’ manual.
-* checking S3 generic/method consistency ... OK
-* checking replacement functions ... OK
-* checking foreign function calls ... OK
-* checking R code for possible problems ... OK
-* checking Rd files ... OK
-* checking Rd metadata ... WARNING
-Rd files with duplicated alias 'quicksort':
-  ‘quicksort.Rd’ ‘quicksort.list.Rd’
-Rd files with duplicated alias 'quicksort.list':
-  ‘quicksort.Rd’ ‘quicksort.list.Rd’
-* checking Rd cross-references ... OK
-* checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... OK
-* checking Rd \usage sections ... WARNING
-Duplicated \argument entries in documentation object 'map_values':
-  ‘x’
-
-Undocumented arguments in documentation object 'pipeline'
-  ‘final_names’ ‘multipath’
-
-Undocumented arguments in documentation object 'string_masks'
-  ‘all_strings’
-
-Functions with \usage entries need to have the appropriate \alias
-entries, and all their arguments documented.
-The \usage entries must correspond to syntactically valid R code.
-See the chapter ‘Writing R documentation files’ in the ‘Writing R
-Extensions’ manual.
-* checking Rd contents ... OK
-* checking for unstated dependencies in examples ... OK
-* checking examples ... OK
-* checking PDF version of manual ... OK
-* DONE
-WARNING: There were 2 warnings.
-NOTE: There was 1 note.
+* checking whether package ‘integrator’ can be installed ... ERROR
+Installation failed.
+See ‘/home/krzysiek/packages/data-integrator/package_dir.Rcheck/00install.out’ for details.

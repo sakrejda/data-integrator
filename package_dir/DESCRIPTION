@@ -9,7 +9,8 @@ Imports:
     DBI
 Depends:
     RPostgreSQL,
-    methods
+    methods,
+    jsonlite
 Description: Readable scripts for importing data depend on defining clear
     tasks.  This package provides functions for common clear tasks.
 License: GPL

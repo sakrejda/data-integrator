@@ -26,12 +26,23 @@ db_connector <- setRefClass(Class="db_connector",
 			clean_connections()
 			clear_connections()
 		},
+    get_credentials = function(crd) {
+      rds_credentials <- isTRUE(grepl('\\.rds$', crd))
+      json_credentials <- isTRUE(grepl('\\.json$', crd))
+      if (rds_credentials) {
+        return(readRDS(crd))
+      } else if (json_credentials) {
+        return(fromJSON(crd))
+      } else {
+        stop("Credentials must be a single file in .json or .rds format.")
+      }
+    },
 		check_crd = function(crd=NULL) {
 			"Checks whether credentials are available and complete."
 			if (is.null(crd)) {
-				crd <- readRDS(.self$credentials)
+				crd <- get_credentials(.self$credentials)
 			} else {
-				crd <- readRDS(crd)
+				crd <- get_credentials(crd)
 			}
 			required_elements <- c('port','host','user','password','dbname')
 			missing <- sapply(required_elements, function(x,crd) !(x %in% crd), crd=names(crd) )
@@ -44,7 +55,7 @@ db_connector <- setRefClass(Class="db_connector",
 		},
 		add_connection = function() {
 			"Adds a connection to the pool if necessary."
-			crd <- readRDS(file=credentials)
+			crd <- get_credentials(credentials)
 			status <- tryCatch(expr = {
 				dbConnect(drv=driver, port=crd[['port']], host=crd[['host']], 
 					user = crd[['user']], password=crd[['password']], dbname=crd[['dbname']])
