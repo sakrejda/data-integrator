@@ -15,10 +15,10 @@ db_connector <- setRefClass(Class="db_connector",
 		}
 	),
 	methods = list(
-		initialize = function(credentials) {
+		initialize = function(credentials, driver=dbDriver("PostgreSQL")) {
 			"Checks for RPostgreSQL, uses credentials to generate a connection and test it."
 			if (!require(RPostgreSQL)) stop("RPostgreSQL required.")
-			driver <<- dbDriver("PostgreSQL")
+			driver <<- driver
 			credentials <<- credentials
 			add_connection()
 			check_crd()
@@ -44,22 +44,22 @@ db_connector <- setRefClass(Class="db_connector",
 			} else {
 				crd <- get_credentials(crd)
 			}
-			required_elements <- c('port','host','user','password','dbname')
-			missing <- sapply(required_elements, function(x,crd) !(x %in% crd), crd=names(crd) )
-			if (any(missing)) {
-				paste0('Credentials list must include elements for:\n ',
-					paste('\t',required_elements[missing],sep='',collapse=',\n'))
-			}
+# strictly speaking, none of these are required.
+#			required_elements <- c('port','host','user','password','dbname')
+#			missing <- sapply(required_elements, function(x,crd) !(x %in% crd), crd=names(crd) )
+#			if (any(missing)) {
+#				paste0('Credentials list must include elements for:\n ',
+#					paste('\t',required_elements[missing],sep='',collapse=',\n'))
+#			}
 			rm(crd)
 			return("Credentials ok.\n")
 		},
 		add_connection = function() {
 			"Adds a connection to the pool if necessary."
-			crd <- get_credentials(credentials)
-			status <- tryCatch(expr = {
-				dbConnect(drv=driver, port=crd[['port']], host=crd[['host']], 
-					user = crd[['user']], password=crd[['password']], dbname=crd[['dbname']])
-			}, error=function(e) return("FAIL"))
+			crd <- c(list(drv=driver), get_credentials(credentials))
+			status <- tryCatch(
+        expr = do.call(what=dbConnect, args=crd),
+			  error=function(e) return("FAIL"))
 			rm(crd)
 			if (identical(status, "FAIL")) {
 				dbListTables(dbListConnections(driver)[[length(dbListConnections(driver))]])
@@ -68,6 +68,8 @@ db_connector <- setRefClass(Class="db_connector",
 				 	"connection has lost its previously pending result."))
 			}
 			connections <- dbListConnections(driver)
+      if (length(connections) == 0)
+        stop("No connections available.  Check your credentials.")
 			return(connections[[length(connections)]])
 		},
 		get_connection=function() {
